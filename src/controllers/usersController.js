@@ -5,7 +5,7 @@ const conn = dbConnection()
 
 controllers.getUsers = (async (req, res) => {
     try {
-        const result = await conn.query('SELECT * FROM usuarios')
+        const result = await conn.query('SELECT * FROM users')
         res.status(200).json(result.rows)
     } catch (error) {
         console.log(error)
@@ -14,12 +14,12 @@ controllers.getUsers = (async (req, res) => {
 
 controllers.postUsers = (async (req, res) => {
     const params = req.body
-    params["password"] = crypto.createHash('md5').update(params.password).digest('hex')
+    params["user_password"] = crypto.createHash('md5').update(params.user_password).digest('hex')
     // console.log(params)
     try {
         await conn.query(
-            'INSERT INTO usuarios VALUES ($1, $2, $3, $4)',
-            [params.nombre, params.email, params.password, params.repeat_password]
+            'INSERT INTO users VALUES ($1, $2, $3, $4, $5)',
+            [params.user_name, params.user_email, params.user_password, params.user_repeat_password,params.user_rol]
         )
         res.status(200).json({ message: 'usuario registrado' })
     } catch (error) {
@@ -31,7 +31,7 @@ controllers.deleteUser = (async (req, res) => {
     const params = req.params.id
     try {
         await conn.query(
-            'DELETE FROM usuarios WHERE id_usuario=$1', [params]
+            'DELETE FROM users WHERE user_id=$1', [params]
         )
         res.status(200).json({ message: 'usuario eliminado' })
     } catch (error) {
@@ -45,12 +45,13 @@ controllers.editUser = (async (req, res) => {
     const id = req.params.id
     try {
         await conn.query(
-            'UPDATE usuarios SET nombre=$1, email=$2, password=$3, repeat_password=$4 WHERE id_usuario=$5',
+            'UPDATE users SET user_name=$1, user_email=$2, user_password=$3, user_repeat_password=$4, user_rol=$5 WHERE user_id=$6',
             [
-                data.nombre,
-                data.email,
-                data.password,
-                data.repeat_password,
+                data.user_name,
+                data.user_email,
+                data.user_password,
+                data.user_repeat_password,
+                data.user_rol,
                 id
             ]
         )
@@ -63,7 +64,7 @@ controllers.editUser = (async (req, res) => {
 controllers.getUser=(async(req,res)=>{
     const id=req.params.id
     try {
-        const result=await conn.query('SELECT * FROM usuarios WHERE id_usuario=$1',[id])
+        const result=await conn.query('SELECT * FROM users WHERE user_id=$1',[id])
         res.status(200).json(result.rows)
     } catch (error) {
         console.log(error)

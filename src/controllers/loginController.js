@@ -9,19 +9,21 @@ const controllers={}
 controllers.login=(async(req,res)=>{
     const params=req.body
     // console.log(params)
-    var passwordCrypto=crypto.createHash('md5').update(params.password).digest('hex')
+    // console.log('hola')
+    var passwordCrypto=crypto.createHash('md5').update(params.user_password).digest('hex')
     // console.log(passwordCrypto)
     try {
         const result=await conn.query(
-            `SELECT * FROM usuarios WHERE nombre=$1 and password=$2`,
-            [params.nombre,passwordCrypto]
+            `SELECT * FROM users WHERE user_name=$1 and user_password=$2`,
+            [params.user_name,passwordCrypto]
         )
         // console.log(result.rows)
         if(result.rows.length>0){
             try {
-                var id_user=result.rows[0].id_usuario
-                var token=jwt.sign({user_name:params.nombre,user_pass:passwordCrypto},keycypher)
-                return res.status(200).json({"token":token,'user':id_user})
+                var user_id=result.rows[0].user_id
+                var user_rol=result.rows[0].user_rol
+                var token=jwt.sign({user_name:params.user_name,user_pass:passwordCrypto},keycypher)
+                return res.status(200).json({"token":token,'user':user_id,'rol':user_rol})
                 // return console.log(token)
             } catch (error) {
                 return res.status(300).json({message:'error con jwt'})

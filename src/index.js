@@ -12,6 +12,7 @@ app.use(cors())
 
 app.use(tasksRoutes)
 app.use(require('./models/usersRouter'))
+app.use(require('./models/testRouter'))
 app.use(require('./models/loginRouter'))
 
 app.listen(app.get('port'),()=>{

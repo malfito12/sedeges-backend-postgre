@@ -25,6 +25,7 @@ const database = () => {
                 rejectUnauthorized:false
             }
         })
+        
         return pool
     }
 }
