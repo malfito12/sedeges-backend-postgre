@@ -52,12 +52,22 @@ CREATE TABLE IF NOT EXISTS results(
     CONSTRAINT pk_tests FOREIGN KEY (test_id) REFERENCES tests(test_id)
 );
 
-CREATE TABLE IF NOT EXISTS data_students(
-    sadas
+CREATE TABLE IF NOT EXISTS register_test_analitico_estudiantes(
+    
 )
-CREATE TABLE IF NOT EXISTS test_grafico(
-    sadas
+CREATE TABLE IF NOT EXISTS register_test_grafico_estudiantes(
+    
 )
+CREATE TABLE IF NOT EXISTS register_test_matematico_estudiantes(
+    
+)
+CREATE TABLE IF NOT EXISTS register_test_aptitudes_estudiantes(
+    
+)
+CREATE TABLE IF NOT EXISTS register_test_intereses_estudiantes(
+    
+)
+
 
 
 INSERT INTO users VALUES('admin','admin@gmail.com','21232f297a57a5a743894a0e4a801fc3','admin','admin')
