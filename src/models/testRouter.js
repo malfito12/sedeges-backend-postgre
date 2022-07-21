@@ -9,4 +9,7 @@ router.post('/test',testControllers.postTest)
 router.put('/test/:id',testControllers.updateTest)
 router.delete('/test/:id',testControllers.deleteTest)
 
+
+router.get('/testsAptitudesStatus',testControllers.getTestsAptitudesStatus)
+
 module.exports=router

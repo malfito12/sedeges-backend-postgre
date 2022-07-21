@@ -2,7 +2,6 @@ CREATE DATABASE IF NOT EXISTS prueba;
 
 USE prueba;
 
-
 CREATE TABLE IF NOT EXISTS users(
     user_name VARCHAR(50) NOT NULL,
     user_email VARCHAR(50) NOT NULL,
@@ -22,6 +21,26 @@ CREATE TABLE IF NOT EXISTS tests(
     CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS tests_aptitudes(
+    test_aptitud_name VARCHAR(50) NOT NULL,
+    test_aptitud_description TEXT,
+    test_aptitud_register_date DATE NOT NULL,
+    test_aptitud_status BOOLEAN NOT NULL,
+    user_id INT,
+    test_aptitud_id SERIAL PRIMARY KEY,
+    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+CREATE TABLE IF NOT EXISTS tests_intereses(
+    test_interes_name VARCHAR(50) NOT NULL,
+    test_interes_description TEXT,
+    test_interes_register_date DATE NOT NULL,
+    test_interes_status BOOLEAN NOT NULL,
+    user_id INT,
+    test_interes_id SERIAL PRIMARY KEY,
+    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+--------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS results(
     result_name VARCHAR(50) NOT NULL,
     result_description TEXT,
@@ -33,16 +52,17 @@ CREATE TABLE IF NOT EXISTS results(
     CONSTRAINT pk_tests FOREIGN KEY (test_id) REFERENCES tests(test_id)
 );
 
-CREATE TABLE IF NOT EXISTS testsVocational(
-    testVocational_name VARCHAR(50) NOT NULL,
-    testVocational_description TEXT,
-    testVocational_register_date DATE NOT NULL,
-    user_id INT,
-    test_id SERIAL PRIMARY KEY,
-    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
-    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-CREATE TA
+CREATE TABLE IF NOT EXISTS data_students(
+    sadas
+)
+CREATE TABLE IF NOT EXISTS test_grafico(
+    sadas
+)
+
+
+INSERT INTO users VALUES('admin','admin@gmail.com','21232f297a57a5a743894a0e4a801fc3','admin','admin')
+
+
 
 SELECT t.id_test, t.name_test, t.description_test,u.id_user,u.name_user,u.email_user
 FROM users u
