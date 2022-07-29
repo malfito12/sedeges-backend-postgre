@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS tests_aptitudes(
     test_aptitud_id SERIAL PRIMARY KEY,
     CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
 CREATE TABLE IF NOT EXISTS tests_intereses(
     test_interes_name VARCHAR(50) NOT NULL,
     test_interes_description TEXT,
@@ -40,6 +41,18 @@ CREATE TABLE IF NOT EXISTS tests_intereses(
     CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+--------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS students(
+    student_first_name VARCHAR(50) NOT NULL,
+    student_last_name VARCHAR(50) NOT NULL,
+    student_birth_date VARCHAR(20) NOT NULL,
+    student_age INT NOT NULL,
+    student_sex CHAR(1) NOT NULL,
+    student_ocupation VARCHAR(30) NOT NULL,
+    student_ci VARCHAR(30) NOT NULL,
+    student_id SERIAL PRIMARY KEY
+);
+--------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS results(
     result_name VARCHAR(50) NOT NULL,

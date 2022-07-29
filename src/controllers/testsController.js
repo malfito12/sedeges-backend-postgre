@@ -41,7 +41,7 @@ controllers.getTest = async (req, res) => {
 
 controllers.postTest = async (req, res) => {
     const params = req.body
-    console.log(params)
+    // console.log(params)
     var aux;
     if (params.test_description === '') aux = null;
     else aux = params.test_description;

@@ -14,6 +14,7 @@ app.use(tasksRoutes)
 app.use(require('./models/usersRouter'))
 app.use(require('./models/testRouter'))
 app.use(require('./models/loginRouter'))
+app.use(require('./models/studentsRouter'))
 
 app.listen(app.get('port'),()=>{
     console.log('server on port 3000')
