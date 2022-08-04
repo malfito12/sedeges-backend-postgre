@@ -14,17 +14,18 @@ controllers.getUsers = (async (req, res) => {
 
 controllers.postUsers = (async (req, res) => {
     const params = req.body
-    params["user_password"] = crypto.createHash('md5').update(params.user_password).digest('hex')
-    // console.log(params)
-    try {
-        await conn.query(
-            'INSERT INTO users VALUES ($1, $2, $3, $4, $5)',
-            [params.user_name, params.user_email, params.user_password, params.user_repeat_password,params.user_rol]
-        )
-        res.status(200).json({ message: 'usuario registrado' })
-    } catch (error) {
-        console.log(error)
-    }
+    console.log(params)
+    // params["user_password"] = crypto.createHash('md5').update(params.user_password).digest('hex')
+    // // console.log(params)
+    // try {
+    //     await conn.query(
+    //         'INSERT INTO users VALUES ($1, $2, $3, $4, $5)',
+    //         [params.user_name, params.user_email, params.user_password, params.user_repeat_password,params.user_rol]
+    //     )
+    //     res.status(200).json({ message: 'usuario registrado' })
+    // } catch (error) {
+    //     console.log(error)
+    // }
 })
 
 controllers.deleteUser = (async (req, res) => {

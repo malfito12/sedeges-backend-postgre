@@ -3,8 +3,8 @@ CREATE DATABASE IF NOT EXISTS prueba;
 USE prueba;
 
 CREATE TABLE IF NOT EXISTS users(
-    user_name VARCHAR(50) NOT NULL,
-    user_email VARCHAR(50) NOT NULL,
+    user_name VARCHAR(50) NOT NULL UNIQUE,
+    user_email VARCHAR(50) NOT NULL UNIQUE,
     user_password TEXT NOT NULL,
     user_repeat_password VARCHAR(50) NOT NULL,
     user_rol VARCHAR(15) NOT NULL,
@@ -41,7 +41,6 @@ CREATE TABLE IF NOT EXISTS tests_intereses(
     CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
---------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS students(
     student_first_name VARCHAR(50) NOT NULL,
     student_last_name VARCHAR(50) NOT NULL,
@@ -52,6 +51,27 @@ CREATE TABLE IF NOT EXISTS students(
     student_ci VARCHAR(30) NOT NULL,
     student_id SERIAL PRIMARY KEY
 );
+
+CREATE TABLE IF NOT EXISTS result_test_aptitudes(
+    pregunta1 INT NOT NULL,
+    pregunta2 INT NOT NULL,
+    pregunta3 INT NOT NULL,
+    pregunta4 INT NOT NULL,
+    pregunta5 INT NOT NULL,
+    seccion VARCHAR(20) NOT NULL,
+    register_date DATE NOT NULL,
+    user_id INT,
+    student_id INT,
+	test_aptitud_id INT,
+    result_test_aptitudes_id SERIAL PRIMARY KEY,
+    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT pk_students FOREIGN KEY (student_id) REFERENCES students(student_id),
+	CONSTRAINT pk_tests_aptitudes FOREIGN KEY (test_aptitud_id) REFERENCES tests_aptitudes(test_aptitud_id)
+);
+
+INSERT INTO users VALUES('admin','admin@gmail.com','21232f297a57a5a743894a0e4a801fc3','admin','admin');
+--------------------------------------------------------------------------------
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS results(
@@ -74,20 +94,30 @@ CREATE TABLE IF NOT EXISTS register_test_grafico_estudiantes(
 CREATE TABLE IF NOT EXISTS register_test_matematico_estudiantes(
     
 )
-CREATE TABLE IF NOT EXISTS register_test_aptitudes_estudiantes(
-    
-)
+
+
 CREATE TABLE IF NOT EXISTS register_test_intereses_estudiantes(
     
 )
 
 
 
-INSERT INTO users VALUES('admin','admin@gmail.com','21232f297a57a5a743894a0e4a801fc3','admin','admin')
+
+
 
 
 
 SELECT t.id_test, t.name_test, t.description_test,u.id_user,u.name_user,u.email_user
 FROM users u
-INNER JOIN tests t
-ON u.id_user=t.id_user ORDER BY t.id_user;
+INNER JOIN tests t ON u.id_user=t.id_user ORDER BY t.id_user;
+
+-------------------------------------------------------------------
+SELECT est.student_first_name,est.student_last_name, u.user_email,t.seccion,t.pregunta1,t.pregunta2,t.pregunta3
+FROM users u
+INNER JOIN result_test_aptitudes t ON t.user_id=u.user_id
+INNER JOIN students est ON t.student_id=est.student_id
+
+----------------------------------------------------------------------
+SELECT DISTINCT s.student_first_name,s.student_last_name,s.student_id,t.test_aptitud_id,
+FROM result_test_aptitudes t
+INNER JOIN students s ON s.student_id=t.student_id
