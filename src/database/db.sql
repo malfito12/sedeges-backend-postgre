@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS students(
     student_age INT NOT NULL,
     student_sex CHAR(1) NOT NULL,
     student_ocupation VARCHAR(30) NOT NULL,
-    student_ci VARCHAR(30) NOT NULL,
+    student_ci VARCHAR(30) NOT NULL UNIQUE,
     student_id SERIAL PRIMARY KEY
 );
 
