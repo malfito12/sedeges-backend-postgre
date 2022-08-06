@@ -43,11 +43,13 @@ CREATE TABLE IF NOT EXISTS tests_intereses(
 
 CREATE TABLE IF NOT EXISTS students(
     student_first_name VARCHAR(50) NOT NULL,
-    student_last_name VARCHAR(50) NOT NULL,
+    student_last_father_name VARCHAR(50) NOT NULL,
+    student_last_mother_name VARCHAR(50) NOT NULL,
     student_birth_date VARCHAR(20) NOT NULL,
     student_age INT NOT NULL,
     student_sex CHAR(1) NOT NULL,
     student_ocupation VARCHAR(30) NOT NULL,
+    student_institution_name VARCHAR(30) NOT NULL,
     student_ci VARCHAR(30) NOT NULL UNIQUE,
     student_id SERIAL PRIMARY KEY
 );

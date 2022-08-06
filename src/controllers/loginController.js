@@ -76,14 +76,15 @@ controllers.recoverPassword = async (req, res,) => {
             }
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    res.status(500).send(error.message)
+                    // res.status(500).send(error.message)
+                    res.status(300).json({message:'Error, El Mensaje no Fue Enviado'})
                 } else {
-                    console.log("email enviado")
-                    res.status(200).json({message:'mensaje enviado'})
+                    console.log("mensaje enviado")
+                    res.status(200).json({message:'La Contraseña Fue Enviada a su Correo Electronico'})
                 }
             })
         }else{
-            res.status(300).json({message:'Error no se tiene registrado el Email'})
+            res.status(300).json({message:'Error, El Usuario y el Email no Coinciden'})
             // console.log(error)
             // res.status(300).json()
         }
