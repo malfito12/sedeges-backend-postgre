@@ -9,7 +9,7 @@ const controllers = {}
 
 controllers.login = (async (req, res) => {
     const params = req.body
-    console.log(params)
+    // console.log(params)
     // console.log('hola')
     var passwordCrypto = crypto.createHash('md5').update(params.user_password).digest('hex')
     // console.log(passwordCrypto)
