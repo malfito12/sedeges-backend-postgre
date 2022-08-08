@@ -15,16 +15,16 @@ controllers.getTests = async (req, res) => {
 }
 
 controllers.getTestsStatus = async (req, res) => {
-    try {
-        const result = await conn.query(
-            'SELECT * FROM tests WHERE test_status'//status_id= true
-            // 'SELECT * FROM tests WHERE NOT status_test'//status_id=false
-        )
-        res.status(200).json(result.rows)
-    } catch (error) {
-        console.log(error)
-        res.status(300).json({ message: 'error en la base de datos' })
-    }
+    // try {
+    //     const result = await conn.query(
+    //         'SELECT * FROM tests WHERE test_status'//status_id= true
+    //         // 'SELECT * FROM tests WHERE NOT status_test'//status_id=false
+    //     )
+    //     res.status(200).json(result.rows)
+    // } catch (error) {
+    //     console.log(error)
+    //     res.status(300).json({ message: 'error en la base de datos' })
+    // }
 }
 controllers.getTest = async (req, res) => {
     try {

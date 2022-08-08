@@ -1,6 +1,5 @@
 const express=require('express')
 const app=express()
-const tasksRoutes=require('./models/tasksRouter')
 const cors= require('cors')
 
 //settings
@@ -10,11 +9,11 @@ app.use(express.urlencoded({extended:false}))
 app.use(cors())
 
 
-app.use(tasksRoutes)
-app.use(require('./models/usersRouter'))
-app.use(require('./models/testRouter'))
 app.use(require('./models/loginRouter'))
+app.use(require('./models/usersRouter'))
 app.use(require('./models/studentsRouter'))
+app.use(require('./models/eventsRouter'))
+app.use(require('./models/testRouter'))
 app.use(require('./models/resultsTestAptitudesRouter'))
 
 app.listen(app.get('port'),()=>{
