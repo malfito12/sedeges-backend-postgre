@@ -15,6 +15,7 @@ app.use(require('./models/studentsRouter'))
 app.use(require('./models/eventsRouter'))
 app.use(require('./models/testRouter'))
 app.use(require('./models/resultsTestAptitudesRouter'))
+app.use(require('./models/resultsTestInteresesRouter'))
 
 app.listen(app.get('port'),()=>{
     console.log('server on port 3000')

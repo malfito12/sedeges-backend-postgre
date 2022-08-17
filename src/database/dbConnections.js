@@ -7,8 +7,8 @@ const database = () => {
     } else {
         const pool = new pg.Pool({
             host: 'localhost',
-            // user: 'root',
-            user: 'postgres',
+            user: 'root',
+            // user: 'postgres',
             password: 'root',
             port: '5432',
             database: 'prueba'

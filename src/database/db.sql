@@ -37,12 +37,12 @@ CREATE TABLE IF NOT EXISTS events(
 );
 
 CREATE TABLE IF NOT EXISTS result_aptitudes(
+    seccion VARCHAR(20) NOT NULL,
     pregunta1 INT NOT NULL,
     pregunta2 INT NOT NULL,
     pregunta3 INT NOT NULL,
     pregunta4 INT NOT NULL,
     pregunta5 INT NOT NULL,
-    seccion VARCHAR(20) NOT NULL,
     register_date DATE NOT NULL,
     user_id INT,
     student_id INT,
@@ -52,13 +52,14 @@ CREATE TABLE IF NOT EXISTS result_aptitudes(
     CONSTRAINT pk_students FOREIGN KEY (student_id) REFERENCES students(student_id),
 	CONSTRAINT pk_events FOREIGN KEY (event_id) REFERENCES events(event_id)
 );
-CREATE TABLE IF NOT EXISTS results_intereses(
+CREATE TABLE IF NOT EXISTS result_intereses(
+    seccion VARCHAR(20) NOT NULL,
     pregunta1 INT NOT NULL,
     pregunta2 INT NOT NULL,
     pregunta3 INT NOT NULL,
     pregunta4 INT NOT NULL,
     pregunta5 INT NOT NULL,
-    seccion VARCHAR(20) NOT NULL,
+    pregunta6 INT NOT NULL,
     register_date DATE NOT NULL,
     user_id INT,
     student_id INT,

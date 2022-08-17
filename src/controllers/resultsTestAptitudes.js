@@ -10,12 +10,12 @@ controllers.post_result_test_aptitudes = async (req, res) => {
             // await conn.query('INSERT INTO result_test_aptitudes VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
             await conn.query('INSERT INTO result_aptitudes VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
                 [
+                    params[i].seccion,
                     params[i].respuestas.pregunta1,
                     params[i].respuestas.pregunta2,
                     params[i].respuestas.pregunta3,
                     params[i].respuestas.pregunta4,
                     params[i].respuestas.pregunta5,
-                    params[i].seccion,
                     new Date(),
                     params[i].user_id,
                     params[i].student_id,

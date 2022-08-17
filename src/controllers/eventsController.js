@@ -70,4 +70,32 @@ controllers.deleteEvent=async(req,res)=>{
     }
 }
 
+controllers.getResultTypeTestAptitudes=async(req,res)=>{
+    var event_id=req.query.event_id
+    var student_id=req.query.student_id
+    try {
+        const result=await conn.query(`SELECT * FROM result_aptitudes WHERE student_id=$1 AND event_id=$2`,[parseInt(student_id),parseInt(event_id)])
+        if(result.rows.length>0){
+            res.status(200).json({message:true})
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(300).json({message:'error en la base de datos'})
+    }
+}
+controllers.getResultTypeTestIntereses=async(req,res)=>{
+    var event_id=req.query.event_id
+    var student_id=req.query.student_id
+    // console.log('entra')
+    try {
+        const result=await conn.query(`SELECT * FROM result_intereses WHERE student_id=$1 AND event_id=$2`,[parseInt(student_id),parseInt(event_id)])
+        if(result.rows.length>0){
+            res.status(200).json({message:true})
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(300).json({message:'error en la base de datos'})
+    }
+}
+
 module.exports=controllers
