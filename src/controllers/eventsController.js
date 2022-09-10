@@ -26,7 +26,7 @@ controllers.getEvents=async(req,res)=>{
         const result=await conn.query(`SELECT * FROM events ORDER BY event_register_date DESC`)
         res.status(200).json(result.rows)
     } catch (error) {
-        console(err)
+        console.log(error)
         res.status(300).json({message:'Error en la Base de Datos'})
     }
 }
@@ -74,28 +74,38 @@ controllers.getResultTypeTestAptitudes=async(req,res)=>{
     var event_id=req.query.event_id
     var student_id=req.query.student_id
     try {
-        const result=await conn.query(`SELECT * FROM result_aptitudes WHERE student_id=$1 AND event_id=$2`,[parseInt(student_id),parseInt(event_id)])
-        if(result.rows.length>0){
-            res.status(200).json({message:true})
+        const array={resultAp:false,resultIn:false}
+        const resultAp=await conn.query(`SELECT * FROM result_aptitudes WHERE student_id=$1 AND event_id=$2`,[parseInt(student_id),parseInt(event_id)])
+        const resultIn=await conn.query(`SELECT * FROM result_intereses WHERE student_id=$1 AND event_id=$2`,[parseInt(student_id),parseInt(event_id)])
+        if(resultAp.rows.length>0){
+            array.resultAp=true
         }
+        if(resultIn.rows.length>0){
+            array.resultIn=true
+        }
+        // console.log(array)
+        res.status(200).json(array)
     } catch (error) {
         console.log(error)
         res.status(300).json({message:'error en la base de datos'})
     }
 }
-controllers.getResultTypeTestIntereses=async(req,res)=>{
-    var event_id=req.query.event_id
-    var student_id=req.query.student_id
-    // console.log('entra')
+
+controllers.getListStudentsResults=async(req,res)=>{
     try {
-        const result=await conn.query(`SELECT * FROM result_intereses WHERE student_id=$1 AND event_id=$2`,[parseInt(student_id),parseInt(event_id)])
-        if(result.rows.length>0){
-            res.status(200).json({message:true})
-        }
+        const result=await conn.query(
+            `SELECT s.student_first_name,s.student_last_father_name,a.event_id,a.student_id
+            FROM all_results a
+            INNER JOIN students s ON s.student_id=a.student_id
+            WHERE a.event_id=$1`,
+            [req.params.id]
+        )
+        res.status(200).json(result.rows)
     } catch (error) {
         console.log(error)
-        res.status(300).json({message:'error en la base de datos'})
+        res.status(300).json({message:'Error en la Base de Datos'})
     }
 }
+
 
 module.exports=controllers

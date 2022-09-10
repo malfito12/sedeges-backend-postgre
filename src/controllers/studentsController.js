@@ -2,7 +2,7 @@ const controllers = {}
 const dbConnection = require('../database/dbConnections')
 const conn = dbConnection()
 
-controllers.getStudents = (async (req, res) => {
+controllers.getStudents = async (req, res) => {
     try {
         const result = await conn.query('SELECT * FROM students')
         res.status(200).json(result.rows)
@@ -10,7 +10,7 @@ controllers.getStudents = (async (req, res) => {
         console.log(error)
         res.status(300)
     }
-})
+}
 
 controllers.getStudent = async (req, res) => {
     // console.log(req.params.id)
@@ -31,7 +31,7 @@ controllers.postStudent = async (req, res) => {
     try {
         await conn.query(
             'INSERT INTO students VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
-            [params.firstName, params.lastNameFather,params.lastNameMother, params.birthDate, params.age, params.sex, params.ocupation,params.nameInstitution, params.ci,params.user_id]
+            [params.firstName, params.lastNameFather,params.lastNameMother, params.birthDate, params.age, params.sex, params.ocupation, params.ci,params.user_id,params.reception_id]
         )
         res.status(200).json({ message: 'estudiante registrado' })
     } catch (error) {

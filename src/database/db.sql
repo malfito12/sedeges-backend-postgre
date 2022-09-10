@@ -11,6 +11,15 @@ CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY
 );
 INSERT INTO users VALUES('admin','admin@gmail.com','21232f297a57a5a743894a0e4a801fc3','admin','admin');
+CREATE TABLE IF NOT EXISTS reception_centers(
+    reception_name VARCHAR(50) NOT NULL,
+    reception_municipio VARCHAR(50) NOT NULL,
+    reception_localidad VARCHAR(50) NOT NULL,
+    reception_register_date DATE NOT NULL,
+    user_id INT,
+    reception_id SERIAL PRIMARY KEY,
+    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
 CREATE TABLE IF NOT EXISTS students(
     student_first_name VARCHAR(50) NOT NULL,
     student_last_father_name VARCHAR(50) NOT NULL,
@@ -19,11 +28,12 @@ CREATE TABLE IF NOT EXISTS students(
     student_age INT NOT NULL,
     student_sex CHAR(1) NOT NULL,
     student_ocupation VARCHAR(30) NOT NULL,
-    student_institution_name VARCHAR(30) NOT NULL,
     student_ci VARCHAR(30) NOT NULL UNIQUE,
     user_id INT,
+    reception_id INT,
     student_id SERIAL PRIMARY KEY,
-    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id)
+    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT pk_reception_centers FOREIGN KEY (reception_id) REFERENCES reception_centers(reception_id)
 );
 
 CREATE TABLE IF NOT EXISTS events(
@@ -68,7 +78,17 @@ CREATE TABLE IF NOT EXISTS result_intereses(
     CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
     CONSTRAINT pk_students FOREIGN KEY (student_id) REFERENCES students(student_id),
 	CONSTRAINT pk_events FOREIGN KEY (event_id) REFERENCES events(event_id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS all_results(
+    user_id INT,
+    student_id INT,
+    event_id INT,
+    all_result_id SERIAL PRIMARY KEY,
+    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT pk_students FOREIGN KEY (student_id) REFERENCES students(student_id),
+	CONSTRAINT pk_events FOREIGN KEY (event_id) REFERENCES events(event_id)
+);
 
 -- CREATE TABLE IF NOT EXISTS results_madures(
 --     result_name VARCHAR(50) NOT NULL,

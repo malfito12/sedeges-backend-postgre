@@ -9,6 +9,6 @@ router.get('/get-event-status',eventsController.getEventStatus)
 router.delete('/event/:id',eventsController.deleteEvent)
 
 router.get('/get-result-type-test-aptitudes',eventsController.getResultTypeTestAptitudes)
-router.get('/get-result-type-test-intereses',eventsController.getResultTypeTestIntereses)
+router.get('/list-student-event/:id',eventsController.getListStudentsResults)
 
 module.exports=router

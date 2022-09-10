@@ -4,6 +4,7 @@ const conn = dbConnection()
 
 controllers.post_result_test_aptitudes = async (req, res) => {
     const params = req.body
+    // console.log(params)
     // console.log(params[0].respuestas.pregunta1)
     try {
         for (var i = 0; i < params.length; i++) {
@@ -21,6 +22,16 @@ controllers.post_result_test_aptitudes = async (req, res) => {
                     params[i].student_id,
                     params[i].event_id
                 ]
+            )
+        }
+        const result=await conn.query(
+            `SELECT * FROM all_results WHERE student_id=$1 AND event_id=$2`,
+            [params[0].student_id,params[0].event_id]
+        )
+        if(result.rows.length===0){
+            await conn.query(
+                `INSERT INTO all_results VALUES ($1,$2,$3)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id]
             )
         }
         res.status(200).json({ message: 'datos registrados' })
