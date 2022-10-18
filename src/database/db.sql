@@ -90,6 +90,38 @@ CREATE TABLE IF NOT EXISTS all_results(
 	CONSTRAINT pk_events FOREIGN KEY (event_id) REFERENCES events(event_id)
 );
 
+CREATE TABLE IF NOT EXISTS result_t1_special_relations (
+    special_relation_name_t1 VARCHAR(20) NOT NULL,
+    special_relation_factor VARCHAR(50) NOT NULL,
+    special_relation_pregunta VARCHAR(15) NOT NULL,
+    special_relation_respuesta CHAR(1) NOT NULL,
+    special_relation_resp_correcta CHAR(1) NOT NULL,
+    register_date DATE NOT NULL,
+    user_id INT,
+    student_id INT,
+    event_id INT,
+    special_relation_t1_id SERIAL PRIMARY KEY,
+    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT pk_students FOREIGN KEY (student_id) REFERENCES students(student_id),
+	CONSTRAINT pk_events FOREIGN KEY (event_id) REFERENCES events(event_id)
+);
+
+CREATE TABLE IF NOT EXISTS result_t2_special_relations (
+    special_relation_name_t2 VARCHAR(20) NOT NULL,
+    special_relation_factor VARCHAR(50) NOT NULL,
+    special_relation_pregunta VARCHAR(15) NOT NULL,
+    special_relation_respuesta CHAR(1) NOT NULL,
+    special_relation_resp_correcta CHAR(1) NOT NULL,
+    register_date DATE NOT NULL,
+    user_id INT,
+    student_id INT,
+    event_id INT,
+    special_relation_t2_id SERIAL PRIMARY KEY,
+    CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT pk_students FOREIGN KEY (student_id) REFERENCES students(student_id),
+	CONSTRAINT pk_events FOREIGN KEY (event_id) REFERENCES events(event_id)
+);
+
 -- CREATE TABLE IF NOT EXISTS results_madures(
 --     result_name VARCHAR(50) NOT NULL,
     
