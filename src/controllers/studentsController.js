@@ -30,8 +30,8 @@ controllers.postStudent = async (req, res) => {
     // console.log(params)
     try {
         await conn.query(
-            'INSERT INTO students VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
-            [params.firstName, params.lastNameFather,params.lastNameMother, params.birthDate, params.age, params.sex, params.ocupation, params.ci,params.user_id,params.reception_id]
+            'INSERT INTO students VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
+            [params.firstName, params.lastNameFather,params.lastNameMother, params.birthDate, params.age, params.sex, params.ocupation, params.ci,params.grado,params.user_id,params.reception_id]
         )
         res.status(200).json({ message: 'estudiante registrado' })
     } catch (error) {
