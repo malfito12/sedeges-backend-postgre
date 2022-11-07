@@ -286,7 +286,14 @@ INSERT INTO rendimiento_conversiones VALUES (90,100,'Superior'),
 (0,24,'Inferior');
 
 
-
+CREATE TABLE IF NOT EXISTS archivos(
+    archivo_nombre VARCHAR(50) NOT NULL,
+    archivo_grado VARCHAR(50) NOT NULL,
+    archivo_contenido TEXT NOT NULL,
+    archivo_description VARCHAR(100) NOT NULL,
+    archivo_register_date DATE NOT NULL,
+    archivo_id SERIAL PRIMARY KEY 
+);
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------

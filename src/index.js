@@ -4,8 +4,11 @@ const cors= require('cors')
 
 //settings
 app.set('port',process.env.PORT || 3000)
-app.use(express.json())
-app.use(express.urlencoded({extended:false}))
+app.use(express.json({limit:'50mb'}));
+app.use(express.urlencoded({
+    limit:'50mb',
+    extended:true
+}))
 app.use(cors())
 
 
@@ -18,6 +21,7 @@ app.use(require('./models/resultsTestAptitudesRouter'))
 app.use(require('./models/resultsTestInteresesRouter'))
 app.use(require('./models/receptionsRouter'))
 app.use(require('./models/resultTestMaduresRouter'))
+app.use(require('./models/archivosRouter'))
 
 app.listen(app.get('port'),()=>{
     console.log('server on port 3000')
