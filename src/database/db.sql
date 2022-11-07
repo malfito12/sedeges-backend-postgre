@@ -14,7 +14,7 @@ INSERT INTO users VALUES('admin','admin@gmail.com','21232f297a57a5a743894a0e4a80
 CREATE TABLE IF NOT EXISTS reception_centers(
     reception_name VARCHAR(50) NOT NULL,
     reception_municipio VARCHAR(50) NOT NULL,
-    reception_localidad VARCHAR(50) NOT NULL,
+    reception_provincia VARCHAR(50) NOT NULL,
     reception_register_date DATE NOT NULL,
     user_id INT,
     reception_id SERIAL PRIMARY KEY,

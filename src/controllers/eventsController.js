@@ -33,7 +33,7 @@ controllers.getEvents = async (req, res) => {
 
 controllers.updateEvent = async (req, res) => {
     const params = req.body
-    console.log(params)
+    // console.log(params)
     try {
         await conn.query(
             `UPDATE events SET event_name=$1,event_description=$2,event_status=$3 WHERE event_id=$4`,

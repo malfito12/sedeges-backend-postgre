@@ -19,7 +19,7 @@ controllers.postReceptions = async (req, res) => {
     try {
         await conn.query(
             `INSERT INTO reception_centers VALUES ($1,$2,$3,$4,$5)`,
-            [params.reception_name, params.reception_municipio, params.reception_localidad, new Date(), params.user_id]
+            [params.reception_name, params.reception_municipio, params.reception_provincia, new Date(), params.user_id]
         )
         res.status(200).json({ message: 'Centro Registrado' })
     } catch (error) {
@@ -32,8 +32,8 @@ controllers.updateReceptions = async (req, res) => {
     const params = req.body
     try {
         await conn.query(
-            `UPDATE reception_centers SET reception_name=$1,reception_municipio=$2,reception_localidad=$3 WHERE reception_id=$4`,
-            [params.reception_name, params.reception_municipio, params.reception_localidad, req.params.id]
+            `UPDATE reception_centers SET reception_name=$1,reception_municipio=$2,reception_provincia=$3 WHERE reception_id=$4`,
+            [params.reception_name, params.reception_municipio, params.reception_provincia, req.params.id]
         )
         res.status(200).json({ message: 'Centro Actualizado' })
     } catch (error) {
