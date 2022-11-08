@@ -55,7 +55,18 @@ controllers.deleteReceptions = async (req, res) => {
 controllers.getStudentsReception = async (req, res) => {
     try {
         const result = await conn.query(
-            `SELECT e.student_first_name,e.student_last_father_name,e.student_last_mother_name,e.student_age,r.reception_id
+            `SELECT 
+            e.student_first_name,
+            e.student_last_father_name,
+            e.student_last_mother_name,
+            e.student_birth_date,
+            e.student_age,
+            e.student_sex,
+            e.student_ocupation,
+            e.student_ci,
+            e.student_grado,
+            e.student_id,
+            r.reception_id
             FROM reception_centers r
             INNER JOIN students e ON r.reception_id=e.reception_id
             WHERE r.reception_id=$1`,

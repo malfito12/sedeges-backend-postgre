@@ -44,8 +44,29 @@ controllers.updateStudent = async (req, res) => {
     const params = req.body
     try {
         await conn.query(
-            'UPDATE students SET student_first_name=$1, student_last_name=$2,student_birth_date=$3,student_age=$4,student_sex=5,student_ocupation=$6,student_ci=$7 WHERE student_id=$8',
-            [params.fisrtName, params.lastName, params.birthDate, params.age, params.sex, params.ocupation, params.ci, req.params.id]
+            `UPDATE students SET 
+            student_first_name=$1, 
+            student_last_father_name=$2,
+            student_last_mother_name=$3,
+            student_birth_date=$4,
+            student_age=$5,
+            student_sex=$6,
+            student_ocupation=$7,
+            student_ci=$8,
+            student_grado=$9 
+            WHERE student_id=$10`,
+            [
+                params.student_first_name,
+                params.student_last_father_name,
+                params.student_last_mother_name,
+                params.student_birth_date, 
+                params.student_age, 
+                params.student_sex, 
+                params.student_ocupation, 
+                params.student_ci, 
+                params.student_grado, 
+                req.params.id
+            ]
         )
         res.status(200).json({ message: 'Estudiante Actualizado' })
     } catch (error) {
@@ -61,7 +82,7 @@ controllers.deleteStudent = async (req, res) => {
         res.status(200).json({ message: 'Estudiante eliminado' })
     } catch (error) {
         console.log(error)
-        res.status(300).json({ message: 'error en la base de datos' })
+        res.status(300).json({ message: 'Error no se pudo eliminar, la informacion todavia es referida del modulo resultados' })
     }
 }
 
