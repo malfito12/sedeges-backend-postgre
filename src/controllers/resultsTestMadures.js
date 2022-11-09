@@ -29,8 +29,8 @@ controllers.post_result_test1 = async (req, res) => {
         )
         if (result.rows.length === 0) {
             await conn.query(
-                `INSERT INTO all_results VALUES ($1,$2,$3)`,
-                [params[0].user_id, params[0].student_id, params[0].event_id]
+                `INSERT INTO all_results VALUES ($1,$2,$3,$4)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id,new Date()]
             )
         }
         res.status(200).json({ message: 'Datos Registrados' })
@@ -66,8 +66,8 @@ controllers.post_result_test2 = async (req, res) => {
         )
         if (result.rows.length === 0) {
             await conn.query(
-                `INSERT INTO all_results VALUES ($1,$2,$3)`,
-                [params[0].user_id, params[0].student_id, params[0].event_id]
+                `INSERT INTO all_results VALUES ($1,$2,$3,$4)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id,new Date()]
             )
         }
         res.status(200).json({ message: 'Datos Registrados' })
@@ -102,8 +102,8 @@ controllers.post_result_test3 = async (req, res) => {
         )
         if (result.rows.length === 0) {
             await conn.query(
-                `INSERT INTO all_results VALUES ($1,$2,$3)`,
-                [params[0].user_id, params[0].student_id, params[0].event_id]
+                `INSERT INTO all_results VALUES ($1,$2,$3,$4)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id,new Date()]
             )
         }
         res.status(200).json({ message: 'Datos Registrados' })
@@ -138,8 +138,8 @@ controllers.post_result_test4 = async (req, res) => {
         )
         if (result.rows.length === 0) {
             await conn.query(
-                `INSERT INTO all_results VALUES ($1,$2,$3)`,
-                [params[0].user_id, params[0].student_id, params[0].event_id]
+                `INSERT INTO all_results VALUES ($1,$2,$3,$4)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id,new Date()]
             )
         }
         res.status(200).json({ message: 'Datos Registrados' })
@@ -174,8 +174,8 @@ controllers.post_result_test5_parte1 = async (req, res) => {
         )
         if (result.rows.length === 0) {
             await conn.query(
-                `INSERT INTO all_results VALUES ($1,$2,$3)`,
-                [params[0].user_id, params[0].student_id, params[0].event_id]
+                `INSERT INTO all_results VALUES ($1,$2,$3,$4)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id,new Date()]
             )
         }
         res.status(200).json({ message: 'Datos Registrados' })
@@ -210,8 +210,8 @@ controllers.post_result_test5_parte2 = async (req, res) => {
         )
         if (result.rows.length === 0) {
             await conn.query(
-                `INSERT INTO all_results VALUES ($1,$2,$3)`,
-                [params[0].user_id, params[0].student_id, params[0].event_id]
+                `INSERT INTO all_results VALUES ($1,$2,$3,$4)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id,new Date()]
             )
         }
         res.status(200).json({ message: 'Datos Registrados' })
@@ -246,8 +246,8 @@ controllers.post_result_test6 = async (req, res) => {
         )
         if (result.rows.length === 0) {
             await conn.query(
-                `INSERT INTO all_results VALUES ($1,$2,$3)`,
-                [params[0].user_id, params[0].student_id, params[0].event_id]
+                `INSERT INTO all_results VALUES ($1,$2,$3,$4)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id,new Date()]
             )
         }
         res.status(200).json({ message: 'Datos Registrados' })
@@ -282,8 +282,8 @@ controllers.post_result_test7 = async (req, res) => {
         )
         if (result.rows.length === 0) {
             await conn.query(
-                `INSERT INTO all_results VALUES ($1,$2,$3)`,
-                [params[0].user_id, params[0].student_id, params[0].event_id]
+                `INSERT INTO all_results VALUES ($1,$2,$3,$4)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id,new Date()]
             )
         }
         res.status(200).json({ message: 'Datos Registrados' })
@@ -339,9 +339,10 @@ controllers.getResultsMadurezStudent = async (req, res) => {
     }]
     try {
         const datos = await conn.query(`SELECT * FROM students WHERE student_id=$1`, [student_id])
+        const fecharegistro=await conn.query(`SELECT * FROM all_results WHERE student_id=$1 AND event_id=$2`,[student_id,event_id])
         var edadCronologica = 0
         var grado_student = ''
-        if (datos.rows.length > 0) {
+        if (datos.rows.length > 0 && fecharegistro.rows.length>0) {
             array[0].datos_estudiante.nombre = datos.rows[0].student_first_name
             array[0].datos_estudiante.apellidoP = datos.rows[0].student_last_father_name
             array[0].datos_estudiante.apellidoM = datos.rows[0].student_last_mother_name
@@ -349,8 +350,9 @@ controllers.getResultsMadurezStudent = async (req, res) => {
             array[0].datos_estudiante.fecha_nacimiento = datos.rows[0].student_birth_date
             edadCronologica = datos.rows[0].student_birth_date
             var a = moment(edadCronologica, 'DD-MM-YYYY')
-            var b = moment()
-            var c = b.diff(a, 'months')
+            var fecha_test=moment(fecharegistro.rows[0].register_date)
+            // var b = moment()
+            var c = fecha_test.diff(a, 'months')
             array[0].datos_test.edad_cronologica = c
             edadCronologica = c
             grado_student = datos.rows[0].student_grado

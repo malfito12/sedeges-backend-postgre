@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS all_results(
     user_id INT,
     student_id INT,
     event_id INT,
+    register_date DATE NOT NULL,
     all_result_id SERIAL PRIMARY KEY,
     CONSTRAINT pk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
     CONSTRAINT pk_students FOREIGN KEY (student_id) REFERENCES students(student_id),

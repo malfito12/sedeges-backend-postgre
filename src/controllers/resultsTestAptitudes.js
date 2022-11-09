@@ -30,8 +30,8 @@ controllers.post_result_test_aptitudes = async (req, res) => {
         )
         if(result.rows.length===0){
             await conn.query(
-                `INSERT INTO all_results VALUES ($1,$2,$3)`,
-                [params[0].user_id,params[0].student_id,params[0].event_id]
+                `INSERT INTO all_results VALUES ($1,$2,$3,$4)`,
+                [params[0].user_id,params[0].student_id,params[0].event_id,new Date()]
             )
         }
         res.status(200).json({ message: 'datos registrados' })
