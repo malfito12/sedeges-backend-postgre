@@ -339,7 +339,7 @@ controllers.getResultsMadurezStudent = async (req, res) => {
     }]
     try {
         const datos = await conn.query(`SELECT * FROM students WHERE student_id=$1`, [student_id])
-        var edadCronoligica = 0
+        var edadCronologica = 0
         var grado_student = ''
         if (datos.rows.length > 0) {
             array[0].datos_estudiante.nombre = datos.rows[0].student_first_name
@@ -347,12 +347,12 @@ controllers.getResultsMadurezStudent = async (req, res) => {
             array[0].datos_estudiante.apellidoM = datos.rows[0].student_last_mother_name
             array[0].datos_estudiante.edad = datos.rows[0].student_age
             array[0].datos_estudiante.fecha_nacimiento = datos.rows[0].student_birth_date
-            edadCronoligica = datos.rows[0].student_birth_date
-            var a = moment(edadCronoligica, 'DD-MM-YYYY')
+            edadCronologica = datos.rows[0].student_birth_date
+            var a = moment(edadCronologica, 'DD-MM-YYYY')
             var b = moment()
             var c = b.diff(a, 'months')
             array[0].datos_test.edad_cronologica = c
-            edadCronoligica = c
+            edadCronologica = c
             grado_student = datos.rows[0].student_grado
         }
         const test1 = await conn.query(
@@ -489,7 +489,7 @@ controllers.getResultsMadurezStudent = async (req, res) => {
         const edad_mental = await conn.query(`SELECT * FROM edad_mental_normas WHERE puntaje=$1`, [sumTotal])
         if (edad_mental) {
             array[0].datos_test.edad_mental = edad_mental.rows[0].edad_mental
-            var coeficiente = (parseInt(edad_mental.rows[0].edad_mental) / parseInt(edadCronoligica)) * 100
+            var coeficiente = (parseInt(edad_mental.rows[0].edad_mental) / parseInt(edadCronologica)) * 100
             array[0].datos_test.coeficiente_intelectual = coeficiente.toFixed(7)
         }
         //-----------------BAREMOS FACTOR GRUPAL--------------------------
