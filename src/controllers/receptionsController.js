@@ -14,7 +14,7 @@ controllers.getReceptions = async (req, res) => {
 
 controllers.postReceptions = async (req, res) => {
     const params = req.body
-    console.log(params)
+    // console.log(params)
     // params ['reception_register_date']=new Date()
     try {
         await conn.query(

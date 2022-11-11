@@ -335,6 +335,12 @@ controllers.getResultsMadurezStudent = async (req, res) => {
             nivel_cv: '',
             pc_total: '',
             nivel_total: '',
+        },
+        datos_opcionales:{
+            edad_nacimiento_est:'',
+            edad_nacimiento_meses_est:'',
+            edad_register_test_est:'',
+            edad_mental_sum:'',
         }
     }]
     try {
@@ -354,6 +360,11 @@ controllers.getResultsMadurezStudent = async (req, res) => {
             // var b = moment()
             var c = fecha_test.diff(a, 'months')
             array[0].datos_test.edad_cronologica = c
+            //------datos opcionales-----------
+            array[0].datos_opcionales.edad_nacimiento_meses_est = c
+            array[0].datos_opcionales.edad_register_test_est =  moment(fecha_test,'DD-MM-YYYY').format('DD-MM-YYYY')
+            array[0].datos_opcionales.edad_nacimiento_est = moment(a,'DD-MM-YYYY').format('DD-MM-YYYY')
+            //-------------------
             edadCronologica = c
             grado_student = datos.rows[0].student_grado
         }
@@ -487,186 +498,191 @@ controllers.getResultsMadurezStudent = async (req, res) => {
             sumTotal = sumTotal + sum
         }
         array[0].datos_test.total = sumTotal
+        array[0].datos_opcionales.edad_mental_sum = sumTotal
         // EDAD CREONOLOGICA ---- EDAD MENTAL ----- COEFICIENTE INTELECTUAL
-        const edad_mental = await conn.query(`SELECT * FROM edad_mental_normas WHERE puntaje=$1`, [sumTotal])
-        if (edad_mental) {
-            array[0].datos_test.edad_mental = edad_mental.rows[0].edad_mental
-            var coeficiente = (parseInt(edad_mental.rows[0].edad_mental) / parseInt(edadCronologica)) * 100
-            array[0].datos_test.coeficiente_intelectual = coeficiente.toFixed(7)
-        }
-        //-----------------BAREMOS FACTOR GRUPAL--------------------------
-        if (datos) {
-            if (grado_student == 'Primer Grado' || grado_student == 'Segundo Grado' || grado_student == 'Tercer Grado') {
-                const result = await conn.query(`SELECT * FROM baremo_primero`)
-                for (var i = 0; i < result.rows.length; i++) {
-                    if (i == 1) {
-                        if (array[0].datos_test.relaciones_espaciales >= parseInt(result.rows[i].data_re)) {
-                            array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i].data_pc)
-                            break
-                        }
-                    } else {
-                        if (array[0].datos_test.relaciones_espaciales > parseInt(result.rows[i].data_re) && array[0].datos_test.relaciones_espaciales <= parseInt(result.rows[i - 1].data_re)) {
-                            array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i - 1].data_pc)
-                            break
-                        }
-                        else {
-                            array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i].data_pc)
-                        }
-                    }
-                }
-                for (var i = 0; i < result.rows.length; i++) {
-                    if (i == 1) {
-                        if (array[0].datos_test.razonamiento_logico >= parseInt(result.rows[i].data_rl)) {
-                            array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i].data_pc)
-                            break
-                        }
-                    } else {
-                        if (array[0].datos_test.razonamiento_logico > parseInt(result.rows[i].data_rl) && array[0].datos_test.razonamiento_logico <= parseInt(result.rows[i - 1].data_rl)) {
-                            array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i - 1].data_pc)
-                            break
-                        }
-                        else {
-                            array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i].data_pc)
-                        }
-                    }
-                }
-                for (var i = 0; i < result.rows.length; i++) {
-                    if (i == 1) {
-                        if (array[0].datos_test.razonamiento_numerico >= parseInt(result.rows[i].data_rn)) {
-                            array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i].data_pc)
-                            break
-                        }
-                    } else {
-                        if (array[0].datos_test.razonamiento_numerico > parseInt(result.rows[i].data_rn) && array[0].datos_test.razonamiento_numerico <= parseInt(result.rows[i - 1].data_rn)) {
-                            array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i - 1].data_pc)
-                            break
-                        }
-                        else {
-                            array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i].data_pc)
-                        }
-                    }
-                }
-                for (var i = 0; i < result.rows.length; i++) {
-                    if (i == 1) {
-                        if (array[0].datos_test.conceptos_verbales >= parseInt(result.rows[i].data_cv)) {
-                            array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i].data_pc)
-                            break
-                        }
-                    } else {
-                        if (array[0].datos_test.conceptos_verbales > parseInt(result.rows[i].data_cv) && array[0].datos_test.conceptos_verbales <= parseInt(result.rows[i - 1].data_cv)) {
-                            array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i - 1].data_pc)
-                            break
+        if(test1.rows.length>0&&test2.rows.length>0&&test3.rows.length>0&&test4.rows.length>0&&test5_parte1.rows.length>0&&test5_parte2.rows.length>0&&test6.rows.length>0&&test7.rows.length>0){
+            const edad_mental = await conn.query(`SELECT * FROM edad_mental_normas WHERE puntaje=$1`, [sumTotal])
+            if (edad_mental.rows.length>0) {
+                array[0].datos_test.edad_mental = edad_mental.rows[0].edad_mental
+                var coeficiente = (parseInt(edad_mental.rows[0].edad_mental) / parseInt(edadCronologica)) * 100
+                array[0].datos_test.coeficiente_intelectual = coeficiente.toFixed(7)
+            }
+            //-----------------BAREMOS FACTOR GRUPAL--------------------------
+            if (datos) {
+                if (grado_student == 'Primer Grado' || grado_student == 'Segundo Grado' || grado_student == 'Tercer Grado') {
+                    const result = await conn.query(`SELECT * FROM baremo_primero`)
+                    for (var i = 0; i < result.rows.length; i++) {
+                        if (i == 1) {
+                            if (array[0].datos_test.relaciones_espaciales >= parseInt(result.rows[i].data_re)) {
+                                array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i].data_pc)
+                                break
+                            }
                         } else {
-                            array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i].data_pc)
+                            if (array[0].datos_test.relaciones_espaciales > parseInt(result.rows[i].data_re) && array[0].datos_test.relaciones_espaciales <= parseInt(result.rows[i - 1].data_re)) {
+                                array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i - 1].data_pc)
+                                break
+                            }
+                            else {
+                                array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i].data_pc)
+                            }
                         }
                     }
-                }
-
-            } else {
-                const result = await conn.query(`SELECT * FROM baremo_segundo`)
-                for (var i = 0; i < result.rows.length; i++) {
-                    if (i == 1) {
-                        if (array[0].datos_test.relaciones_espaciales >= parseInt(result.rows[i].data_re)) {
-                            array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i].data_pc)
-                            break
-                        }
-                    } else {
-                        if (array[0].datos_test.relaciones_espaciales > parseInt(result.rows[i].data_re) && array[0].datos_test.relaciones_espaciales <= parseInt(result.rows[i - 1].data_re)) {
-                            array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i - 1].data_pc)
-                            break
-                        }
-                        else {
-                            array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i].data_pc)
-                        }
-                    }
-                }
-                for (var i = 0; i < result.rows.length; i++) {
-                    if (i == 1) {
-                        if (array[0].datos_test.razonamiento_logico >= parseInt(result.rows[i].data_rl)) {
-                            array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i].data_pc)
-                            break
-                        }
-                    } else {
-                        if (array[0].datos_test.razonamiento_logico > parseInt(result.rows[i].data_rl) && array[0].datos_test.razonamiento_logico <= parseInt(result.rows[i - 1].data_rl)) {
-                            array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i - 1].data_pc)
-                            break
-                        }
-                        else {
-                            array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i].data_pc)
-                        }
-                    }
-                }
-                for (var i = 0; i < result.rows.length; i++) {
-                    if (i == 1) {
-                        if (array[0].datos_test.razonamiento_numerico >= parseInt(result.rows[i].data_rn)) {
-                            array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i].data_pc)
-                            break
-                        }
-                    } else {
-                        if (array[0].datos_test.razonamiento_numerico > parseInt(result.rows[i].data_rn) && array[0].datos_test.razonamiento_numerico <= parseInt(result.rows[i - 1].data_rn)) {
-                            array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i - 1].data_pc)
-                            break
-                        }
-                        else {
-                            array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i].data_pc)
-                        }
-                    }
-                }
-                for (var i = 0; i < result.rows.length; i++) {
-                    if (i == 1) {
-                        if (array[0].datos_test.conceptos_verbales >= parseInt(result.rows[i].data_cv)) {
-                            array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i].data_pc)
-                            break
-                        }
-                    } else {
-                        if (array[0].datos_test.conceptos_verbales > parseInt(result.rows[i].data_cv) && array[0].datos_test.conceptos_verbales <= parseInt(result.rows[i - 1].data_cv)) {
-                            array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i - 1].data_pc)
-                            break
+                    for (var i = 0; i < result.rows.length; i++) {
+                        if (i == 1) {
+                            if (array[0].datos_test.razonamiento_logico >= parseInt(result.rows[i].data_rl)) {
+                                array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i].data_pc)
+                                break
+                            }
                         } else {
-                            array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i].data_pc)
+                            if (array[0].datos_test.razonamiento_logico > parseInt(result.rows[i].data_rl) && array[0].datos_test.razonamiento_logico <= parseInt(result.rows[i - 1].data_rl)) {
+                                array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i - 1].data_pc)
+                                break
+                            }
+                            else {
+                                array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i].data_pc)
+                            }
+                        }
+                    }
+                    for (var i = 0; i < result.rows.length; i++) {
+                        if (i == 1) {
+                            if (array[0].datos_test.razonamiento_numerico >= parseInt(result.rows[i].data_rn)) {
+                                array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i].data_pc)
+                                break
+                            }
+                        } else {
+                            if (array[0].datos_test.razonamiento_numerico > parseInt(result.rows[i].data_rn) && array[0].datos_test.razonamiento_numerico <= parseInt(result.rows[i - 1].data_rn)) {
+                                array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i - 1].data_pc)
+                                break
+                            }
+                            else {
+                                array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i].data_pc)
+                            }
+                        }
+                    }
+                    for (var i = 0; i < result.rows.length; i++) {
+                        if (i == 1) {
+                            if (array[0].datos_test.conceptos_verbales >= parseInt(result.rows[i].data_cv)) {
+                                array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i].data_pc)
+                                break
+                            }
+                        } else {
+                            if (array[0].datos_test.conceptos_verbales > parseInt(result.rows[i].data_cv) && array[0].datos_test.conceptos_verbales <= parseInt(result.rows[i - 1].data_cv)) {
+                                array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i - 1].data_pc)
+                                break
+                            } else {
+                                array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i].data_pc)
+                            }
+                        }
+                    }
+    
+                } else {
+                    const result = await conn.query(`SELECT * FROM baremo_segundo`)
+                    for (var i = 0; i < result.rows.length; i++) {
+                        if (i == 1) {
+                            if (array[0].datos_test.relaciones_espaciales >= parseInt(result.rows[i].data_re)) {
+                                array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i].data_pc)
+                                break
+                            }
+                        } else {
+                            if (array[0].datos_test.relaciones_espaciales > parseInt(result.rows[i].data_re) && array[0].datos_test.relaciones_espaciales <= parseInt(result.rows[i - 1].data_re)) {
+                                array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i - 1].data_pc)
+                                break
+                            }
+                            else {
+                                array[0].datos_pc_nivel.pc_re = parseInt(result.rows[i].data_pc)
+                            }
+                        }
+                    }
+                    for (var i = 0; i < result.rows.length; i++) {
+                        if (i == 1) {
+                            if (array[0].datos_test.razonamiento_logico >= parseInt(result.rows[i].data_rl)) {
+                                array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i].data_pc)
+                                break
+                            }
+                        } else {
+                            if (array[0].datos_test.razonamiento_logico > parseInt(result.rows[i].data_rl) && array[0].datos_test.razonamiento_logico <= parseInt(result.rows[i - 1].data_rl)) {
+                                array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i - 1].data_pc)
+                                break
+                            }
+                            else {
+                                array[0].datos_pc_nivel.pc_rl = parseInt(result.rows[i].data_pc)
+                            }
+                        }
+                    }
+                    for (var i = 0; i < result.rows.length; i++) {
+                        if (i == 1) {
+                            if (array[0].datos_test.razonamiento_numerico >= parseInt(result.rows[i].data_rn)) {
+                                array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i].data_pc)
+                                break
+                            }
+                        } else {
+                            if (array[0].datos_test.razonamiento_numerico > parseInt(result.rows[i].data_rn) && array[0].datos_test.razonamiento_numerico <= parseInt(result.rows[i - 1].data_rn)) {
+                                array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i - 1].data_pc)
+                                break
+                            }
+                            else {
+                                array[0].datos_pc_nivel.pc_rn = parseInt(result.rows[i].data_pc)
+                            }
+                        }
+                    }
+                    for (var i = 0; i < result.rows.length; i++) {
+                        if (i == 1) {
+                            if (array[0].datos_test.conceptos_verbales >= parseInt(result.rows[i].data_cv)) {
+                                array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i].data_pc)
+                                break
+                            }
+                        } else {
+                            if (array[0].datos_test.conceptos_verbales > parseInt(result.rows[i].data_cv) && array[0].datos_test.conceptos_verbales <= parseInt(result.rows[i - 1].data_cv)) {
+                                array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i - 1].data_pc)
+                                break
+                            } else {
+                                array[0].datos_pc_nivel.pc_cv = parseInt(result.rows[i].data_pc)
+                            }
                         }
                     }
                 }
             }
+            //----------CONVERSIONES------------
+            const conversion = await conn.query(`SELECT * FROM rendimiento_conversiones`)
+            if (conversion) {
+                for (var i = 0; i < conversion.rows.length; i++) {
+                    var min = parseInt(conversion.rows[i].data_pc_min)
+                    var max = parseInt(conversion.rows[i].data_pc_max)
+                    if (array[0].datos_pc_nivel.pc_re >= min && array[0].datos_pc_nivel.pc_re <= max) {
+                        array[0].datos_pc_nivel.nivel_re = conversion.rows[i].data_rendimiento
+                        break
+                    }
+                }
+                for (var i = 0; i < conversion.rows.length; i++) {
+                    var min = parseInt(conversion.rows[i].data_pc_min)
+                    var max = parseInt(conversion.rows[i].data_pc_max)
+                    if (array[0].datos_pc_nivel.pc_rl >= min && array[0].datos_pc_nivel.pc_rl <= max) {
+                        array[0].datos_pc_nivel.nivel_rl = conversion.rows[i].data_rendimiento
+                        break
+                    }
+                }
+                for (var i = 0; i < conversion.rows.length; i++) {
+                    var min = parseInt(conversion.rows[i].data_pc_min)
+                    var max = parseInt(conversion.rows[i].data_pc_max)
+                    if (array[0].datos_pc_nivel.pc_rn >= min && array[0].datos_pc_nivel.pc_rn <= max) {
+                        array[0].datos_pc_nivel.nivel_rn = conversion.rows[i].data_rendimiento
+                        break
+                    }
+                }
+                for (var i = 0; i < conversion.rows.length; i++) {
+                    var min = parseInt(conversion.rows[i].data_pc_min)
+                    var max = parseInt(conversion.rows[i].data_pc_max)
+                    if (array[0].datos_pc_nivel.pc_cv >= min && array[0].datos_pc_nivel.pc_cv <= max) {
+                        array[0].datos_pc_nivel.nivel_cv = conversion.rows[i].data_rendimiento
+                        break
+                    }
+                }
+            }
+            // console.log(array)
+            res.status(200).json(array)
+        }else{
+            res.status(200).json([])
         }
-        //----------CONVERSIONES------------
-        const conversion = await conn.query(`SELECT * FROM rendimiento_conversiones`)
-        if (conversion) {
-            for (var i = 0; i < conversion.rows.length; i++) {
-                var min = parseInt(conversion.rows[i].data_pc_min)
-                var max = parseInt(conversion.rows[i].data_pc_max)
-                if (array[0].datos_pc_nivel.pc_re >= min && array[0].datos_pc_nivel.pc_re <= max) {
-                    array[0].datos_pc_nivel.nivel_re = conversion.rows[i].data_rendimiento
-                    break
-                }
-            }
-            for (var i = 0; i < conversion.rows.length; i++) {
-                var min = parseInt(conversion.rows[i].data_pc_min)
-                var max = parseInt(conversion.rows[i].data_pc_max)
-                if (array[0].datos_pc_nivel.pc_rl >= min && array[0].datos_pc_nivel.pc_rl <= max) {
-                    array[0].datos_pc_nivel.nivel_rl = conversion.rows[i].data_rendimiento
-                    break
-                }
-            }
-            for (var i = 0; i < conversion.rows.length; i++) {
-                var min = parseInt(conversion.rows[i].data_pc_min)
-                var max = parseInt(conversion.rows[i].data_pc_max)
-                if (array[0].datos_pc_nivel.pc_rn >= min && array[0].datos_pc_nivel.pc_rn <= max) {
-                    array[0].datos_pc_nivel.nivel_rn = conversion.rows[i].data_rendimiento
-                    break
-                }
-            }
-            for (var i = 0; i < conversion.rows.length; i++) {
-                var min = parseInt(conversion.rows[i].data_pc_min)
-                var max = parseInt(conversion.rows[i].data_pc_max)
-                if (array[0].datos_pc_nivel.pc_cv >= min && array[0].datos_pc_nivel.pc_cv <= max) {
-                    array[0].datos_pc_nivel.nivel_cv = conversion.rows[i].data_rendimiento
-                    break
-                }
-            }
-        }
-        // console.log(array)
-        res.status(200).json(array)
     } catch (error) {
         console.log(error)
         res.status(300).json({ message: 'Error en la base de datos' })
